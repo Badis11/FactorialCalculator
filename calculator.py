@@ -1,6 +1,7 @@
+import copy
 def fact(n):
-    n = int(input("Z czego silnia wariacie: "))
-    m= copy.copy(n)
+    n=int(n)
+    m= int(copy.copy(n))
     wynik = 0
     while m!=0:
         if wynik == 0:
@@ -11,13 +12,20 @@ def fact(n):
             m=m-1
     return wynik
 
-import copy, pygame, sys
-pygame.init()
-size = width, height = 735,730
-screen = pygame.display.set_mode(size)
-bg = pygame.image.load("jakasilnia.jpg")
+import PySimpleGUI as sg
+sg.theme("DarkAmber")
+layout = [  [sg.Text('Factorial of which number? '), sg.InputText()],
+            [sg.Button('Calculate'),],
+            [sg.Text("Answer will appear here.", key="silnia")]]
+
+# Create the Window
+window = sg.Window('Window Title', layout)
+# Event Loop to process "events" and get the "values" of the inputs
 while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
-    screen.blit(bg, (0,0))
-    pygame.display.flip()
+    event, values = window.read()
+    if event == sg.WIN_CLOSED: # if user closes window or clicks cancel
+        break
+    window["silnia"].update( fact(values[0]))
+    print('Input:', values[0], "  Output:", fact(values[0]))
+
+window.close()
